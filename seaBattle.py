@@ -81,7 +81,7 @@ class Board:
                 curr = Dot(d.x + dx, d.y + dy)
                 if not (self.out(curr)) and curr not in self.busy:
                     if verb:
-                        self.field[curr.x][curr.y] = "."
+                        self.field[curr.x][curr.y] = "•"
                         self.busy.append(curr)
 
     def __str__(self):
@@ -90,7 +90,7 @@ class Board:
         for i, row in enumerate(self.field):
             res += f"\n{i + 1} | " + " | ".join(row) + " |"
         if self.hid:
-            res = res.replace('■', "0")
+            res = res.replace('■', "~")
         return res
     def out(self, d):
         return not ((0 <= d.x < self.size) and (0 <= d.y < self.size))
@@ -111,7 +111,7 @@ class Board:
                     self.contour(ship, verb = True)
                     print("Корабль уничтожен!!")
                     return True
-        self.field[d.x][d.y] = "."
+        self.field[d.x][d.y] = "•"
         print("Мимо!")
         return False
 
