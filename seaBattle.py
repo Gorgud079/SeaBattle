@@ -56,7 +56,7 @@ class Board:
         self.hid = hid
 
         self.count = 0
-        self.field = [["0"] * size for _ in range(size)]
+        self.field = [["~"] * size for _ in range(size)]
         self.busy = []
         self.ships = []
 
@@ -235,7 +235,6 @@ class Game:
 
 g = Game()
 g.start()
-
 
 
 
