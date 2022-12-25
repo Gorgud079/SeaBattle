@@ -86,7 +86,7 @@ class Board:
 
     def __str__(self):
         res = ""
-        res += "  | 1 | 2 | 3 | 4 | 5 | 6 |"
+        res += "  | A | B | C | D | F | G |"
         for i, row in enumerate(self.field):
             res += f"\n{i + 1} | " + " | ".join(row) + " |"
         if self.hid:
@@ -143,14 +143,16 @@ class AI(Player):
 class User(Player):
     def ask(self):
         while True:
+            index = {"A" : 1, "B" : 2, "C" : 3, "D" : 4, "F" : 5, "G" : 6}
             cords = input("Ход игрока.\n Введите координаты - ").split()
+            cords[1] = cords[1].upper()
             if len(cords) != 2:
                 print("Введите координаты корректно (x,y)")
                 continue
-            x, y = cords
+            x, y = cords[0], index[cords[1]]
 
-            if not(x.isdigit()) or not(y.isdigit()):
-                print("Введите числа")
+            if not(x.isdigit()) or not(cords[1].isalpha()):
+                print("Введите число и букву (координаты)")
                 continue
             x, y = int(x), int(y)
             return Dot(x - 1, y - 1)
