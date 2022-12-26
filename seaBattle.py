@@ -21,13 +21,6 @@ class UsedException(BoardException):
 class WrongShipException(BoardException):
     pass
 
-# class Cell(object):
-#     empty_cell = ' '
-#     ship_cell = '■'
-#     destroyed_ship = 'X'
-#     damaged_ship = '□'
-#     miss_cell = '•'
-
 class Ship:
     def __init__(self, fore, length, orient):
         self.fore = fore
@@ -56,11 +49,11 @@ class Board:
         self.hid = hid
 
         self.count = 0
-        self.field = [["~"] * size for _ in range(size)]
+        self.field = [["◠"] * size for _ in range(size)]
         self.busy = []
         self.ships = []
 
-    def add_ship(self,ship):
+    def add_ship(self, ship):
         for d in ship.dots:
             if self.out(d) or d in self.busy:
                 raise WrongShipException()
@@ -82,7 +75,7 @@ class Board:
                 if not (self.out(curr)) and curr not in self.busy:
                     if verb:
                         self.field[curr.x][curr.y] = "•"
-                        self.busy.append(curr)
+                    self.busy.append(curr)
 
     def __str__(self):
         res = ""
@@ -90,7 +83,7 @@ class Board:
         for i, row in enumerate(self.field):
             res += f"\n{i + 1} | " + " | ".join(row) + " |"
         if self.hid:
-            res = res.replace('■', "~")
+            res = res.replace('■', "◠")
         return res
     def out(self, d):
         return not ((0 <= d.x < self.size) and (0 <= d.y < self.size))
@@ -105,11 +98,14 @@ class Board:
         for ship in self.ships:
             if d in ship.dots:
                 ship.lives -= 1
-                self.field[d.x][d.y] = "X"
+                self.field[d.x][d.y] = "╳"
                 if ship.lives == 0:
                     self.count += 1
                     self.contour(ship, verb = True)
                     print("Корабль уничтожен!!")
+                    return False
+                else:
+                    print("Ранен!!")
                     return True
         self.field[d.x][d.y] = "•"
         print("Мимо!")
@@ -143,18 +139,18 @@ class AI(Player):
 class User(Player):
     def ask(self):
         while True:
-            index = {"A" : 1, "B" : 2, "C" : 3, "D" : 4, "F" : 5, "G" : 6}
-            cords = input("Ход игрока.\n Введите координаты - ").split()
+            index = {"A": 1, "B": 2, "C": 3, "D": 4, "F": 5, "G":  6}
+            cords = input("Ход игрока. Введите координаты - ").split()
             cords[1] = cords[1].upper()
             if len(cords) != 2:
                 print("Введите координаты корректно (x,y)")
                 continue
-            x, y = cords[0], index[cords[1]]
+            x, y = cords[0], cords[1]
 
-            if not(x.isdigit()) or not(cords[1].isalpha()):
+            if not(x.isdigit()) or not(y.isalpha()):
                 print("Введите число и букву (координаты)")
                 continue
-            x, y = int(x), int(y)
+            x, y = int(x), int(index[cords[1]])
             return Dot(x - 1, y - 1)
 class Game:
     def __init__(self, size = 6):
@@ -189,10 +185,6 @@ class Game:
                     pass
         board.begin()
         return board
-
-
-
-
 
     def greet(self):
         print("-" * 40)
@@ -237,24 +229,3 @@ class Game:
 
 g = Game()
 g.start()
-
-
-
-
-
-
-
-# def start_table():
-#     print(index := "_", "A", "B", "C", "D", "E", "F", "G", "H", sep=" | ")
-#
-#     for i, row in enumerate(field):
-#         row_str = f"{i + 1}{' '.join(row)}"
-#         print(row_str)
-#
-#     coord1 = input("?").upper()
-#     column1 = index.find(coord1[0])
-#     print(column1)
-#     row1 = int(coord1[1])
-#     print(row1, column1)
-# field = [[" "] * 3 for i in range(6)]
-# start_table()
