@@ -105,7 +105,7 @@ class Board:
                     print("Корабль уничтожен!!")
                     return False
                 else:
-                    print("Ранен!!")
+                    print("<<<~---- РАНЕН ----~>>>")
                     return True
         self.field[d.x][d.y] = "•"
         print("Мимо!")
@@ -141,9 +141,13 @@ class User(Player):
         while True:
             index = {"A": 1, "B": 2, "C": 3, "D": 4, "F": 5, "G":  6}
             cords = input("Ход игрока. Введите координаты - ").split()
+            check_rus = ["А", "В", "С", "Д", "Ф", "П", "И"]
             cords[1] = cords[1].upper()
             if len(cords) != 2:
                 print("Введите координаты корректно (x,y)")
+                continue
+            if cords[1] in check_rus:
+                print("Введите на английском (ENGLISH) координаты")
                 continue
             x, y = cords[0], cords[1]
 
@@ -187,23 +191,25 @@ class Game:
         return board
 
     def greet(self):
-        print("-" * 40)
-        print("""\t\t ИГРА: Морской бой
-        Введите координаты по Х и У оси:
-             Х - номер строки
-             У - номер столбца""")
-        print("-" * 40)
+        print("#" * 48)
+        print("""\t\t\t ИГРА: Морской бой
+ Введите координаты по Х и У оси через пробел:
+        Х - номер строки (цифра)
+        У - номер столбца (буква)
+        Пример: 1 А или 1 а
+                Удачи!!!""")
+        print("#" * 48)
+        print()
 
     def loop(self):
         num = 0
         while True:
-            print("-" * 20)
-            print("Доска пользователя: ")
+            print("① Доска пользователя: ")
             print(self.us.board)
-            print("-" * 20)
-            print("Доска компьютера: ")
+            print("<>" * 14)
+            print("② Доска компьютера: ")
             print(self.ai.board)
-            print("-" * 20)
+            print("-" * 28)
             if num % 2 == 0:
                 print("Ходит пользователь!")
                 repeat = self.us.move()
@@ -213,13 +219,15 @@ class Game:
             if repeat:
                 num -= 1
             if self.ai.board.count == 7:
-                print("*" * 20)
+                print("#" * 20)
                 print("""\\\\  // _ ||  ||  \\\\    //\\\\    // () ||  ||\n  ||  | |||  ||   \\\\  //  \\\\  //  || |\\\\ ||\n  ||  |_|\\\\_//     \\\\//    \\\\//   || | \\\\||""")
-                print("*" * 20)
+                print("#" * 20)
                 break
             if self.us.board.count == 7:
                 print("-" * 20)
+                print("-" * 20)
                 print("YOU LOSE")
+                print("-" * 20)
                 print("-" * 20)
                 break
             num += 1
